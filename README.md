@@ -101,3 +101,102 @@ func maxProfit(prices []int) int {
     return maxProfit
 }
 ```
+
+### Valid Palindrome
+```typescript
+function isPalindrome(s: string): boolean {
+    let begin = 0; 
+    let end = s.length - 1;
+    // have two pointers in the beginning and end
+    while (begin < end) {
+        // we don't consider non-alphanumeric characters
+        // if current char is not a letter or number, move to the next
+        while (begin < end && !s[begin].match(/[a-z0-9]/i)) {
+            begin++;
+        }
+        // if current char from the end is not a letter or number, move to the previous char
+        while (begin < end && !s[end].match(/[a-z0-9]/i)) {
+            end--;
+        }
+        // if characters from both ends are not equal, not a palindrome
+        if(s[begin].toLowerCase() !== s[end].toLowerCase()) return false;
+        // move pointer and keep checking
+        begin++;
+        end--;
+    }
+    // if never returned while checking it is implied that string is a palindrome
+    return true;
+};
+```
+
+### Invert Binary Tree
+Time Complexity: O(n) since each node visited once
+
+Space Complexity: Due to recursion, O(h) function calls will be placed on the stack where h is height of tree. however, h ∈ O(n) so space complexity is also the same.
+```typescript
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+
+function invertTree(root: TreeNode | null): TreeNode | null {
+    // if root has subtrees
+    if (root != null) {
+        // recursively invert left subtree first
+        invertTree(root.left);
+        // recursively invert right subtree first
+        invertTree(root.right);
+
+        // finally invert left and right top level subtrees
+        let temp: TreeNode = root.left;
+        root.left = root.right;
+        root.right = temp;
+    }
+    return root;
+};
+```
+
+### Valid Anagram
+Time Complexity: O(n) where n is the length of the strings. we go over each string one at a time.
+
+Space Complexity: O(1) since we declare the size of the array and then perform operations on it
+```typescript
+function isAnagram(s: string, t: string): boolean {
+    // anagrams must be on strings of equal length;
+    if (s.length !== t.length) {
+        return false;
+    }
+    const charCodeA = 'a'.charCodeAt(0);
+    // we use a counter for each alphabet
+    // each element represents the position in the alphabet
+    const counter: number[] = new Array(26).fill(0);
+
+    // for the first string, increase the frequency at each position
+    for (let i = 0; i < s.length; i++) {
+        counter[s.charCodeAt(i) - charCodeA]++;
+    }
+
+    // for the second string, decrease the frequency at each position
+    for (let i = 0; i < t.length; i++) {
+        counter[t.charCodeAt(i) - charCodeA]--;
+        // for two strings to be anagrams, they should have
+        // the same frequency of all letters
+        // if the string lengths are the same but have different letters, we will have
+        // a negative value and so it'll return out
+        if (counter[t.charCodeAt(i) - charCodeA] < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+```
