@@ -200,3 +200,25 @@ function isAnagram(s: string, t: string): boolean {
     return true;
 }
 ```
+### Binary Search
+Time Complexity: O(logn) nums is divided into half each time. In the worst-case scenario, we need to cut nums until the range has no element, and it takes logarithmic time to reach this break condition.
+
+Space Compexity: O(1) since only left, right, and middle are declared.
+
+```typescript
+function search(nums: number[], target: number): number {
+    let start = 0;
+    let end = nums.length - 1;
+    
+    while (start <= end) {
+       let mid = Math.floor((start + end) / 2);
+        if (target === nums[mid]) return mid;
+        if (target < nums[mid]) {
+            end = mid - 1;
+        } else if (target > nums[mid]) {
+            start = mid + 1;
+        }
+    }
+    return -1; 
+};
+```
