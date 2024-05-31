@@ -222,3 +222,37 @@ function search(nums: number[], target: number): number {
     return -1; 
 };
 ```
+
+### Flood Fill
+Time Complexity: O(n) where n is the maximum number of pixels. we might need to visit each pixel.
+
+Space Complexity: O(n) the size of the call stack during DFS since each pixel visited recursively. 
+```typescript
+function floodFill(image: number[][], sr: number, sc: number, newColor: number): number[][] {
+  // use dfs and hence, use recursion. go all the way to the end.
+  // start with getting the original color
+  let color = image[sr][sc];
+  if (color !== newColor) {
+    dfs(image, sr, sc, color, newColor);
+  }
+  return image;
+};
+
+function dfs(image, r, c, color, newColor) {
+  // for the first iteration, this will always be true.
+  // for subsequent iterations, this refers to a neighboring cell
+  // if the neighboring cells are the same color as the original, change the color.
+  // also avoids visiting a cell twice if valid
+  if (image[r][c] === color) {
+    image[r][c] = newColor;
+    // then keep traversing row wise until you reach the first row
+    if (r - 1 >= 0) dfs(image, r - 1, c, color, newColor);
+    // then keep traversing column wise until you reach the first column
+    if (c - 1 >= 0) dfs(image, r, c - 1, color, newColor);
+    // then keep traversing row wise until you reach last row
+    if (r + 1 < image.length) dfs(image, r + 1, c, color, newColor);
+    // lastly keep traversing column wise until last column
+    if (c + 1 < image[0].length) dfs(image, r, c + 1, color, newColor);
+  }
+}
+```
