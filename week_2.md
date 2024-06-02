@@ -31,7 +31,7 @@ function isBalanced(root: TreeNode | null): boolean {
 
     const left = height(root.left);
     const right = height(root.right);
-    // both the left and right subtrees should not differ in height,
+    // both the left and right subtrees should not differ in height by more than 1,
     // and the subtrees of left and right should also themselves be balanced.
     return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right); 
 };
