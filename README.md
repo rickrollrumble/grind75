@@ -256,3 +256,62 @@ function dfs(image, r, c, color, newColor) {
   }
 }
 ```
+### Maximum sub-array
+#### Brute Force
+After the first run, total sum is 1. We see that the max total reached stays at 0 until index 3, and current total is also as 0. Then the current total drops to -1 at index 4, the max total remains 0. At index 5, current total becomes 1, max total becomes 1. At index 6, current total becomes 2, max total (max of current and max) also becomes 2. At the end, the current total never rises above max total.
+
+In the next run starting at index 1, current total restarts at 0. At index 1, current total is 1, max total is 2. No change. Then max current total is -2, max total is 2. Then current and max totals are both 2. Then current total is 1, max total stays 2. Then current total rises to 3 at j=5 and so does max total. Then current total rises to 4 at j=6 and so does max total. Current total then ends at 3.
+
+Restart at index 2. At j=2, current total starts at -3, then rises to 1. Max total remains 4. Then current total drops to 0, then rises to 3. Then drops to 2. Max total never changes.
+
+When you start at index 3. Current total starts at 4, drops to 3, and then rises to 6. Max total also rises to 6. never drops thereafter.
+
+Effectively in each interaction, you're dropping one element in the beginning and finding totals.
+```typescript
+let arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+
+function maxSubArray(nums: number[]): number {
+    let max_subarray = Number.NEGATIVE_INFINITY;
+    for(let i = 0; i < nums.length; i++) {
+        let current_subarray = 0;
+        for (let j = i; j < nums.length; j++) {
+            current_subarray += nums[j];
+            max_subarray = Math.max(current_subarray, max_subarray);
+        }
+    }
+    return max_subarray;
+};
+```
+
+#### Kadane's Algorithm (Dynamic Programming)
+Brute force gets tweaked. We start with the current and max total at the first element, -2. Then we start at the next index, and check the element with the current total. If the current total would rise when we add the current element to the current total, we assign the current total to be the current element, since only a positive number can do that. The max total count also starts at the current positive element.
+
+Effectively, we drop the previous element. Otherwise, it's assumed that two positive numbers followed each other and the total rose in any case. 
+
+So when i=2, the current total would drop. Our longest subarray sum at this point is the solitary 1. If the array ended here, that would be the answer.
+
+When i=3, the current total rises. We have a positive number. Check if the positive number is bigger than the previous positive number. If yes, we start calculating again from this bigger positive number.The max sub array is just the positive 4.
+
+When i=4, the current total stays the same. The subarray total is positive but has dropped to 3 compared to the standalone 4. 
+
+Then at i=5, another positive number. The current total rises to 5, so the max subarray has also risen to 5.
+
+At i=6, the positive number pushes current and max total again. 
+
+At i=7, the big negative has dropped current total and max total. So we don't do anything. 
+
+At i = 8, the big positive has raised current total once more, but not enough to bump up current and max total.
+Meanwhile, the max total is 
+```typescript
+let arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+
+function maxSubArray(nums: number[]): number {
+    let current = nums[0];
+    let max = nums[0];
+    for (let i = 1; i < nums.length; i++) {
+        current = Math.max(nums[i], current + nums[i]);
+        max = Math.max(max, current);
+    }
+    return max;
+};
+```
