@@ -131,3 +131,55 @@ var solution = function(isBadVersion: any) {
     };
 };
 ```
+### Implement Queue using Stacks
+This is a silly problem ngl.
+```typescript
+class MyQueue {
+    private s1: number[];
+    private s2: number[];
+    private front: number;
+    constructor() {
+        this.s1 = [];
+        this.s2 = [];
+    }
+
+    push(x: number): void {
+        // if empty, set the front of queue.
+        if (this.s1.length === 0) this.front = x;
+        this.s1.push(x);
+    }
+
+    pop(): number {
+        // first we insert stack 1 to stack 2 in reverse order
+        // then return the top of stack
+        if(this.s2.length === 0) {
+            while (this.s1.length > 0) {
+                this.s2.push(this.s1.pop());
+            }
+        }
+        return this.s2.pop();
+    }
+
+    peek(): number {
+        // if stack 1 has been previously emptied, return top of stack 2
+        // else if pop has never been called before, front can be returned
+        if (!(this.s2.length === 0)) {
+            return this.s2[this.s2.length - 1];
+        }
+        return this.front;
+    }
+
+    empty(): boolean {
+        return this.s1.length == 0 && this.s2.length === 0;
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * var obj = new MyQueue()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.peek()
+ * var param_4 = obj.empty()
+ */
+```
