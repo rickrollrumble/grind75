@@ -86,3 +86,48 @@ left subtree of root height: -1
 right subtree of root height: -1
 -----
 ```
+### First Bad Version
+Time complexity: O(log n) since this is a binary search.
+Space complexity: O(1) since only the index variables needed.
+
+Assume an array of 7 versions from 1 to 7. They're `[G, G, B, B, B, B, B]`
+
+start = 1, end = 7, middle = 1 + floor(7-1/2) = 4. isBad(4) = true, so end = 4.
+
+start = 1, end = 4, middle = 1 + floor(4-1/2) = 2, isBad(2) = false, so start = 3.
+
+start = 3, end = 4, middle = 3 + floor(4-3/2) =3, isBad(3) = true, so end = 3.
+
+start = end, so terminate loop.
+
+```typescript
+/**
+ * The knows API is defined in the parent class Relation.
+ * isBadVersion(version: number): boolean {
+ *     ...
+ * };
+ */
+/**
+* problem is effectively a binary search. 
+*/
+var solution = function(isBadVersion: any) {
+
+    return function(n: number): number {
+        let start = 1;
+        let end = n;
+        while (start < end) {
+            let middle = Math.floor(start + ((end - start)/2))
+            // if bad version is the middle, first bad version is before middle.
+            // we can readjust our end to the middle.
+            if (isBadVersion(middle)) {
+                end = middle;
+            } else {
+                // if middle isn't bad, first bad versions start after.
+                // so we readjust starting position.
+                start = middle + 1;
+            }
+        }
+        return start;
+    };
+};
+```
