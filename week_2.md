@@ -183,30 +183,40 @@ class MyQueue {
  * var param_4 = obj.empty()
  */
 ```
-### Ransom Note
-Time Complexity: O(m). Creating a counter for m characters in magazine takes O(m) time and O(1) for an insert or update. Then O(n) time for going through ransom note and O(1) for lookup. m > n, so O(m) is the worst case time.
 
-Space Complexity: O(1), the map will never have more than 26 characters.
+### Linked List Cycle
 ```typescript
-function canConstruct(ransomNote: string, magazine: string): boolean {
-  // in obvious case, if ransom note has more letters it cannot be constructed from magazine
-  if (ransomNote.length > magazine.length) return false;
-  // initialize a letter count map
-  let mag = {}
-  for (let c of magazine) {
-    // if letter already exists, increment count.
-    // if it doesn't, initialize count.
-    mag[c] = (mag[c] || 0) + 1;
-  }  
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
 
-  for(let c of ransomNote) {
-    // if letter doesn't exist in map, return false.
-    // if it does, decrease the count in the map.
-    // for any additional count of letters, the count will decrease
-    // to less than zero.
-    if(!mag[c] || mag[c] <= 0) return false;
-    mag[c]--;
-  }
-  return true;
+function hasCycle(head: ListNode | null): boolean {
+    // consider a race, around a circular track.
+    // if one runner is faster, they'll eventually lap the other
+    // at some point. similarly, at some point the fast pointer
+    // will lap the slow pointer.
+   if (head == null) return false;
+   let slow = head;
+   let fast = head.next;
+
+   while(slow !== fast) {
+    // if the faster pointer has hit the second last node in a non-cycle
+    // it will point to null. 
+    // if the faster pointer has instead the last node, the next node will also be null.
+    if(fast === null || fast.next === null) {
+        return false;
+    }
+    slow = slow.next;
+    fast = fast.next.next;
+   }
+    return true;
 };
 ```
