@@ -220,3 +220,40 @@ function hasCycle(head: ListNode | null): boolean {
     return true;
 };
 ```
+### Lowest Common Ancestor of a Binary Search Tree
+BST Properties:
+- Left subtree of a node N contains nodes whose values are lesser than or equal to node N's value.
+- Right subtree of a node N contains nodes whose values are greater than node N's value.
+- Both left and right subtrees are also BSTs.
+```typescript
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function lowestCommonAncestor(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
+	const pVal = p.val;
+    const qVal = q.val;
+    let node = root;
+    while (node != null) {
+        let parentVal = node.val;
+        if (pVal > parentVal && qVal > parentVal) {
+            node = node.right;
+        } else if (pVal < parentVal && qVal < parentVal) {
+            node = node.left;
+        } else {
+            return node;
+        }
+    }
+    return null;
+};
+```
